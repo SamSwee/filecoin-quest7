@@ -10,15 +10,29 @@ const provider = new ethers.providers.JsonRpcProvider(
 );
 
 async function main() {
-  // Retrieve the gas value from the network.
-  const feeData = await provider.getFeeData();
-  const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas;
   /**
     A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
     so coinFile here is a factory for instances of our CoinFile contract.
     **/
 
-  // Insert code here
+    const coinFile = await ethers.getContractFactory("CoinFile");
+    console.log(`Deploying smart contract...`);
+    const deployedCoinFile = await coinFile.deploy();
+    
+    // Wait for it to finish deploying.
+    await deployedCoinFile.deployed();
+    
+    // Print the address of the deployed contract*
+    console.log(
+      `The smart contract was deployed at: ${deployedCoinFile.address}`
+     );
+    
+    
+    // Print the owner
+    const owner = await deployedCoinFile.owner();
+    const balance = await deployedCoinFile.balanceOf(owner);
+    console.log(`The owner is ${owner} with balance of ${balance} tokens`);
+    
 }
 
 // Call the main function and catch if there is any error
